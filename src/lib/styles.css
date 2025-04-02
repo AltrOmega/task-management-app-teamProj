@@ -14,7 +14,8 @@ body {
 }
 
 .sidebar {
-    width: 500px;
+    min-width: 300px;
+    width: 400px;
     background: #2a2a2a;
     padding: 20px;
     display: flex;
@@ -78,13 +79,38 @@ body {
 
 .task {
     background: #444;
-    padding: 15px;
+    padding: 7px;
     cursor: pointer;
     border-radius: 5px;
 }
 
 .task:hover {
     background: #555;
+}
+
+.titlep{
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    font-size: auto;
+    align-content: center;
+    justify-content: center;
+}
+
+.taskgrid {
+    display: grid;
+    grid-template-columns: 1fr 33px;
+}
+
+.checkbox {
+    height: 20px;
+    width: 20px;
+    align-self: top;
+    justify-self: right;
+}
+
+.task.sel {
+    background-color: blue;
 }
 
 .task.completed {
@@ -113,8 +139,10 @@ body {
 
 /* Index.html */
 .task-add-container {
+    height: fit-content;
     width: 90%;
     max-width: 1000px;
+    /*inject the margins directly into component*/
     margin: 20px auto;
     padding: 20px;
     padding-bottom: 55px;
@@ -170,6 +198,7 @@ body {
     border: none;
     color: white;
     font-size: 16px;
+    resize: none;
 }
 
 .add-button {
