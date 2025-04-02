@@ -1,0 +1,535 @@
+
+> task-management-app-teamproj@0.0.1 dev
+> vite dev
+
+
+  VITE v6.2.4  ready in 1851 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+on len: 1
+1:00:13 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:32:16 `$page` is an illegal variable name. To reference a global variable called `$page`, use `globalThis.$page`
+https://svelte.dev/e/global_reference_invalid
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:32:16
+   30 |      }
+   31 |  
+   32 |      const add = $page.url.searchParams.get("add");
+                              ^
+   33 |      let result = add.split(/\$/);
+   34 |      console.log("result: " + result);
+[Error [CompileError]: src/routes/+page.svelte:32:16 `$page` is an illegal variable name. To reference a global variable called `$page`, use `globalThis.$page`
+https://svelte.dev/e/global_reference_invalid] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 30 |      }\n' +
+    ' 31 |  \n' +
+    ' 32 |      const add = $page.url.searchParams.get("add");\n' +
+    '                            ^\n' +
+    ' 33 |      let result = add.split(/\\$/);\n' +
+    ' 34 |      console.log("result: " + result);',
+  code: 'global_reference_invalid',
+  loc: { line: 32, column: 16, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '\tlet { data } = $props();\n' +
+    "\t//let id___ = data.cookies.get('userid');\n" +
+    '\n' +
+    "    import Task from '$lib/stores/task.svelte.js';\n" +
+    "    import * as db from '$lib/stores/database.js';\n" +
+    "    import { onMount } from 'svelte';\n" +
+    '\n' +
+    '    //let userid = 0;\n' +
+    '\n' +
+    '    /*db.createTodo(userid, "Gus Amon", "1234", "Impasta", false);\n' +
+    '    db.createTodo(userid, "Void", "void", "void", true);*/\n' +
+    '    var taskList = $derived([...refreshList(data.todos)]);\n' +
+    '    //taskList.push(new Task(12345,"tutle", "DATE", "VOID", true));\n' +
+    '    console.log(data.todos);\n' +
+    '\n' +
+    '    let selected = $state(new Task());\n' +
+    '\n' +
+    '    function getTaskById(id) {\n' +
+    '        return taskList.find((obj) => obj.id === id);\n' +
+    '    }\n' +
+    '\n' +
+    '    function refreshList(todos) {\n' +
+    '        console.log("triggered");\n' +
+    '        let out = [];\n' +
+    '        for (let i=0; i<todos.length; i++) {\n' +
+    '            out.push(Task.deserialise(todos[i]))\n' +
+    '        }\n' +
+    '        return out;\n' +
+    '    }\n' +
+    '\n' +
+    '    const add = $page.url.searchParams.get("add");\n' +
+    '    let result = add.split(/\\$/);\n' +
+    '    console.log("result: " + result);\n' +
+    '\n' +
+    '</script>\n' +
+    '\n' +
+    '<div class="container">\n' +
+    '    <div class="sidebar">\n' +
+    '        <div class=option-bar>\n' +
+    '            <div class="sorting">\n' +
+    '                <select>\n' +
+    '                    <option class="option" value="data_desc" selected>Od najnowszego</option>\n' +
+    '                    <option class="option" value="data_asc">Od ostatniego</option>\n' +
+    '                </select>\n' +
+    '            </div>\n' +
+    '            <div class="search-bar">\n' +
+    '                <input type="text" placeholder="WYSZUKAJ...">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '        <div class="tasks">\n' +
+    '        {#each taskList as task (task.id)}\n' +
+    '            <div class="task {task.style}" onclick={() => {\n' +
+    '                if (task.id === selected.id){\n' +
+    '                    selected.isSelected = false;\n' +
+    '                    selected = new Task();\n' +
+    '                    return\n' +
+    '                }\n' +
+    '                selected.isSelected = false;\n' +
+    '                selected = task;\n' +
+    '                selected.isSelected = true;\n' +
+    '                }}>\n' +
+    '                <div class="taskgrid">\n' +
+    '                    <p class="titlep {task.crossed}"> {task.title} </p>\n' +
+    '\n' +
+    '                    <div class="date">{task.date}</div>\n' +
+    '\n' +
+    '                    <button class = "checkbox" style="text-decoration: none;" onclick = {\n' +
+    '                        (e) => {e.stopPropagation();\n' +
+    '                        task.toggleCompleted(); }}>\n' +
+    '                        {#if task.isCompleted}\n' +
+    '                        <div class = "checkbox-content">✓</div>\n' +
+    '                        {/if}\n' +
+    '                    </button>\n' +
+    '                </div>\n' +
+    '            \n' +
+    '            </div>\n' +
+    '            \n' +
+    '        {/each}\n' +
+    '        </div>\n' +
+    '        <form method="DELETE" action="/?del" onsubmit={() => {\n' +
+    "            db.deleteTodo('123', selected.id);\n" +
+    '            }}>\n' +
+    '            <button type="submit" class="del-button { selected.isSelected ? "del-selected" : "" }">USUŃ ZADANIE</button>\n' +
+    '        </form>\n' +
+    '        <a href="/add_task" class="add-button">DODAJ ZADANIE</a>\n' +
+    '    </div>\n' +
+    '    <div class="content">\n' +
+    '        <textarea class="task-desc" placeholder="Opis" bind:value={\n' +
+    '            () => {return selected ? selected.content : ""},\n' +
+    '            (v) => {if (selected) {selected.content = v}}\n' +
+    '        }></textarea>\n' +
+    '    </div>\n' +
+    '</div>',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/altr/programming/task-management-app-teamProj/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/altr/programming/task-management-app-teamProj/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/altr/programming/task-management-app-teamProj/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/altr/programming/task-management-app-teamProj/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/altr/programming/task-management-app-teamProj/node_modules/vite/dist/node/chunks/dep-DrOo5SEf.js:30872:12)
+      at async loud_ssr_load_module (file:///home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+1:01:14 PM [vite] (ssr) page reload src/routes/+page.svelte
+on len: 1
+1:01:24 PM [vite-plugin-svelte] src/routes/+page.svelte:53:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:01:24 PM [vite-plugin-svelte] src/routes/+page.svelte:53:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+TypeError: Cannot read properties of undefined (reading 'url')
+    at _page (/home/altr/programming/task-management-app-teamProj/src/routes/+page.svelte:32:34)
+    at children (/home/altr/programming/task-management-app-teamProj/.svelte-kit/generated/root.svelte:66:5)
+    at Layout (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte:5:10)
+    at Root (/home/altr/programming/task-management-app-teamProj/.svelte-kit/generated/root.svelte:61:3)
+    at render (/home/altr/programming/task-management-app-teamProj/node_modules/svelte/src/internal/server/index.js:135:2)
+    at Function._render [as render] (/home/altr/programming/task-management-app-teamProj/node_modules/svelte/src/legacy/legacy-server.js:27:24)
+    at render_response (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:192:29)
+    at async render_page (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/page/index.js:299:10)
+    at async resolve (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/respond.js:499:18)
+    at async respond (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/respond.js:363:20)
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+TypeError: Cannot read properties of undefined (reading 'url')
+    at _page (/home/altr/programming/task-management-app-teamProj/src/routes/+page.svelte:32:34)
+    at children (/home/altr/programming/task-management-app-teamProj/.svelte-kit/generated/root.svelte:66:5)
+    at Layout (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte:5:10)
+    at Root (/home/altr/programming/task-management-app-teamProj/.svelte-kit/generated/root.svelte:61:3)
+    at render (/home/altr/programming/task-management-app-teamProj/node_modules/svelte/src/internal/server/index.js:135:2)
+    at Function._render [as render] (/home/altr/programming/task-management-app-teamProj/node_modules/svelte/src/legacy/legacy-server.js:27:24)
+    at render_response (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:192:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async render_page (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/page/index.js:299:10)
+    at async resolve (/home/altr/programming/task-management-app-teamProj/node_modules/@sveltejs/kit/src/runtime/server/respond.js:499:18)
+1:01:55 PM [vite-plugin-svelte] src/routes/+page.svelte:53:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:01:55 PM [vite-plugin-svelte] src/routes/+page.svelte:53:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+1:02:19 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:02:25 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:03:14 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:03:27 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:03:27 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+1:03:31 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:03:31 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+1:03:31 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:03:31 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+1:07:36 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:07:36 PM [vite-plugin-svelte] src/routes/+page.svelte:58:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+1:09:06 PM [vite] (client) hmr update /src/routes/+page.svelte
+1:09:06 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:09:07 PM [vite-plugin-svelte] src/routes/+page.svelte:38:8 State referenced in its own scope will never update. Did you mean to reference it inside a closure?
+https://svelte.dev/e/state_referenced_locally
+1:09:07 PM [vite-plugin-svelte] src/routes/+page.svelte:59:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:09:07 PM [vite-plugin-svelte] src/routes/+page.svelte:59:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+1:09:12 PM [vite-plugin-svelte] src/routes/+page.svelte:38:8 State referenced in its own scope will never update. Did you mean to reference it inside a closure?
+https://svelte.dev/e/state_referenced_locally
+1:09:12 PM [vite-plugin-svelte] src/routes/+page.svelte:59:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:09:12 PM [vite-plugin-svelte] src/routes/+page.svelte:59:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_t,sus_d,sus_c
+on len: 1
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+result: sus_tain,sus_d,sus_c
+1:10:28 PM [vite] (client) hmr update /src/routes/+page.svelte
+1:10:28 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:10:28 PM [vite-plugin-svelte] src/routes/+page.svelte:60:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:10:28 PM [vite-plugin-svelte] src/routes/+page.svelte:60:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+1:10:31 PM [vite-plugin-svelte] src/routes/+page.svelte:60:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:10:31 PM [vite-plugin-svelte] src/routes/+page.svelte:60:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+userid: 32e8fe7c-1ac7-4e0c-a66d-63146284c2d9
+GOT: [object Object]
+db_raw: [object Object]
+result: sus_tain,sus_d,sus_c
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+userid: 44072eb8-b88d-415c-b0ef-552d4973bcc4
+GOT: [object Object]
+db_raw: [object Object]
+result: sus_tain,sus_d,sus_c
+on len: 1
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+userid: 0c00bb6d-3f88-4e6e-a24b-971f09190107
+GOT: [object Object]
+db_raw: [object Object]
+result: sus_t,sus_d,sus_c
+1:11:30 PM [vite] (client) hmr update /src/routes/+page.svelte
+1:11:30 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:11:30 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:11:30 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+1:11:31 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:11:31 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+1:11:41 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:11:41 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+userid: dc20aacc-7ef2-4b1d-ab2c-0f6beb7d27f4
+GOT: [object Object]
+db_raw: [object Object]
+Map(5) {
+  '123' => [
+    {
+      id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+      title: 'Title',
+      date: '2025-04-23',
+      content: 'Content',
+      isCompleted: false
+    }
+  ],
+  '32e8fe7c-1ac7-4e0c-a66d-63146284c2d9' => [
+    {
+      id: '2f1f6346-92e2-4cdb-95f7-b33bbbf0f2bc',
+      title: 'sus_tain',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  '44072eb8-b88d-415c-b0ef-552d4973bcc4' => [
+    {
+      id: '833035bc-efae-47f3-bc88-52ba319469bc',
+      title: 'sus_tain',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  '0c00bb6d-3f88-4e6e-a24b-971f09190107' => [
+    {
+      id: '89deac3d-6cc1-4197-b593-498027d188ba',
+      title: 'sus_t',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  'dc20aacc-7ef2-4b1d-ab2c-0f6beb7d27f4' => [
+    {
+      id: 'e4cda7da-a664-4480-98c2-109a61d75992',
+      title: 'sus_t',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ]
+}
+result: sus_t,sus_d,sus_c
+1:11:41 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:11:41 PM [vite-plugin-svelte] src/routes/+page.svelte:61:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+on len: 1
+triggered
+[
+  {
+    id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+    title: 'Title',
+    date: '2025-04-23',
+    content: 'Content',
+    isCompleted: false
+  }
+]
+userid: ab5f12e0-a1a8-4cdf-9377-fd9fc0ff221b
+GOT: [object Object]
+db_raw: [object Object]
+Map(6) {
+  '123' => [
+    {
+      id: '357ac71a-8c25-4a50-8d4b-01d2b48e5b5d',
+      title: 'Title',
+      date: '2025-04-23',
+      content: 'Content',
+      isCompleted: false
+    }
+  ],
+  '32e8fe7c-1ac7-4e0c-a66d-63146284c2d9' => [
+    {
+      id: '2f1f6346-92e2-4cdb-95f7-b33bbbf0f2bc',
+      title: 'sus_tain',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  '44072eb8-b88d-415c-b0ef-552d4973bcc4' => [
+    {
+      id: '833035bc-efae-47f3-bc88-52ba319469bc',
+      title: 'sus_tain',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  '0c00bb6d-3f88-4e6e-a24b-971f09190107' => [
+    {
+      id: '89deac3d-6cc1-4197-b593-498027d188ba',
+      title: 'sus_t',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  'dc20aacc-7ef2-4b1d-ab2c-0f6beb7d27f4' => [
+    {
+      id: 'e4cda7da-a664-4480-98c2-109a61d75992',
+      title: 'sus_t',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ],
+  'ab5f12e0-a1a8-4cdf-9377-fd9fc0ff221b' => [
+    {
+      id: '929fd07b-248c-4fdd-93af-16fc124b64d0',
+      title: 'sus_t',
+      date: 'sus_d',
+      content: 'sus_c',
+      isCompleted: false
+    }
+  ]
+}
+result: sus_t,sus_d,sus_c
+1:20:26 PM [vite] (client) hmr update /src/routes/+page.svelte
+1:20:26 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:20:26 PM [vite-plugin-svelte] src/routes/+page.svelte:86:12 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+1:20:26 PM [vite-plugin-svelte] src/routes/+page.svelte:86:12 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
