@@ -16,7 +16,9 @@
     }
 
     let selected = $state(-1)
-    let selObj = $derived(taskList[selected]);
+    var selObj = $derived(taskList[selected]);
+
+    let temp = $derived(selObj ? "" : "temp");
 </script>
 
 <div class="container">
@@ -34,23 +36,38 @@
         </div>
         <div class="tasks">
         {#each taskList as task, i(i)}
-            <div class="task {task.comp}" onclick={() => selected = i}>
+            <div class="task {task.style}" onclick={() => {
+                if (selected === i) {
+                    task.isSelected = false;
+                    selected = -1;
+                    return
+                }
+                if (selObj) {
+                    selObj.isSelected = false;
+                }
+                selected = i;
+                task.isSelected = true;
+                }}>
                 <div class="taskgrid">
-                    <p class="titlep">{taskList[i].title}</p>
-                    <input class="checkbox" type="checkbox" bind:checked={taskList[i].tog}>
+                    <p class="titlep {task.crossed}">{task.title}</p>
+                    <button class = "checkbox" style="text-decoration: none;"onclick = {
+                    (e) => {e.stopPropagation()
+                        task.isCompleted = !task.isCompleted;
+                    }}>
+                        {#if task.isCompleted}
+                        <div class = "checkbox-content">✓</div>
+                        {/if}
+                    </button>
                 </div>
             </div>
         {/each}
-        <!--
-            <div class="task">ZADANIE 1</div>
-            <div class="task">ZADANIE 2</div>
-            <div class="task">ZADANIE 3</div>
-            <div class="task completed">ZADANIE 4 ✓</div>
-        -->
         </div>
         <a href="/add_page" class="add-button">DODAJ ZADANIE</a>
     </div>
     <div class="content">
-        <AddTask title={selObj?.title} />
+        <textarea class="task-desc" placeholder="Opis" bind:value={
+            () => {return selObj ? selObj.content : ""},
+            (v) => {if (selObj) {selObj.content = v}}
+        }></textarea>
     </div>
 </div>

@@ -102,24 +102,22 @@ body {
     grid-template-columns: 1fr 33px;
 }
 
-.checkbox {
-    height: 20px;
-    width: 20px;
-    align-self: top;
-    justify-self: right;
-}
-
-.task.sel {
-    background-color: blue;
+.crossed {
+    text-decoration: line-through;
+    /* consider a different color */
+    color:darkgray;
 }
 
 .task.completed {
     background: #666;
-    text-decoration: line-through;
 }
 
 .task.completed:hover {
     background: #777;
+}
+
+.task.selected {
+    background: #007bff;
 }
 
 .add-task {
@@ -131,9 +129,14 @@ body {
 }
 
 .content {
+    border: solid 1px #757575;
     flex-grow: 1;
     padding: 20px;
     background: #1e1e1e;
+}
+
+.temp {
+    color: #757575;
 }
 
 
@@ -142,7 +145,6 @@ body {
     height: fit-content;
     width: 90%;
     max-width: 1000px;
-    /*inject the margins directly into component*/
     margin: 20px auto;
     padding: 20px;
     padding-bottom: 55px;
@@ -209,4 +211,32 @@ body {
     cursor: pointer;
     float: right;
     text-decoration: none;
+}
+
+.checkbox {
+    background-color: white;
+    height: 20px;
+    width: 20px;
+    align-self: center;
+    justify-self: right;
+    align-items: center;
+    justify-items: center;
+    padding: 0px;
+    display: relative;
+    border-radius: 3px;
+    border: solid black 4px;
+    border-top-color: #333;
+    border-left-color: #333;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.checkbox-content {
+    font-weight: bolder;
+    font-size: 15px;
+    width: auto;
+    height: auto;
+    line-height: 0px;
+    letter-spacing: 0px;
+    padding-top: 1px;
 }
