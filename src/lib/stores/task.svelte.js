@@ -13,7 +13,7 @@ export default class Task {
         return style;
     });
 
-    constructor(title, date, content, completed = false) {
+    constructor(title="", date="", content="", completed = false) {
         this.title = title;
         this.date = date;
         this.content = content;

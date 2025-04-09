@@ -37,7 +37,7 @@ body {
 
 .option-bar {
     display: grid;
-    grid-template-columns: 3fr 7fr;
+    grid-template-columns: 4fr 7fr;
     width: 100%;
     column-gap: 15px;
 }
@@ -95,6 +95,7 @@ body {
     font-size: auto;
     align-content: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 .taskgrid {
@@ -211,6 +212,7 @@ body {
     cursor: pointer;
     float: right;
     text-decoration: none;
+    text-align: center;
 }
 
 .checkbox {
