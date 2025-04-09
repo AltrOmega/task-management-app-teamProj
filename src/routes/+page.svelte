@@ -1,25 +1,18 @@
 <script>
     import Task from '$lib/stores/task.svelte.js';
+    import * as db from '$lib/stores/database.js';
+    let userid = 0;
 
-    let sample = [
-        new Task("Gus Amon", "1234", "yes"),
-        new Task("VOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOIDVOID", "VOID", "VOID"),
-        new Task("Eat FOOD", "NOW", "Consume", true),
-        new Task("Factory MUST expand", "Tommorow", "EXPANDEXPANDEXPANDEXPANDEXPANDEXPANDEXPANDEXPANDEXPANDEXPAND", true),
-    ];
+    db.createTodo(userid, "Gus Amon", "1234", "Impasta", false);
+    db.createTodo(userid, "Void", "void", "void", true);
+    var taskList = $state([...db.getTodos(userid)]);
 
-    var taskList = $state([]);
-    const repeat = 1
-    for(let i = 0; i < repeat; i++){
-        taskList.push(...sample);
+    let selected = $state(new Task());
+
+    function getTaskById(id) {
+        return taskList.find((obj) => obj.id === id);
     }
 
-    let selected = $state(-1)
-    var selObj = $derived(taskList[selected] ? taskList[selected] : new Task());
-
-    let temp = $derived(selObj ? "" : "temp");
-    let tutle = $state("");
-    let sus = () => {selObj.title = tutle}
 </script>
 
 <div class="container">
@@ -36,30 +29,22 @@
             </div>
         </div>
         <div class="tasks">
-        {#each taskList as task, i(i)}
+        {#each taskList as task (task.id)}
             <div class="task {task.style}" onclick={() => {
-                if (selected === i) {
-                    //tutle = task.title;
-                    task.isSelected = false;
-                    selected = -1;
+                if (task.id === selected.id){
+                    selected.isSelected = false;
+                    selected = new Task();
                     return
                 }
-                selObj.isSelected = false;
-                selected = i;
-                task.isSelected = true;
+                selected.isSelected = false;
+                selected = task;
+                selected.isSelected = true;
                 }}>
                 <div class="taskgrid">
-                    <p class="titlep {task.crossed}">
-                        <!--{#if (i === selected)}
-                            {tutle}
-                        {:else}-->
-                            {task.title}
-                        <!--{/if}-->
-                    </p>
-                    <button class = "checkbox" style="text-decoration: none;"onclick = {
-                    (e) => {e.stopPropagation()
-                        task.isCompleted = !task.isCompleted;
-                    }}>
+                    <p class="titlep {task.crossed}"> {task.title} </p>
+                    <button class = "checkbox" style="text-decoration: none;" onclick = {
+                        (e) => {e.stopPropagation();
+                        task.toggleCompleted(); }}>
                         {#if task.isCompleted}
                         <div class = "checkbox-content">✓</div>
                         {/if}
@@ -71,12 +56,10 @@
         <a href="/add_task" class="add-button">DODAJ ZADANIE</a>
     </div>
     <div class="content">
-        
-
-        <!--<textarea class="task-desc" placeholder="Opis" bind:value={
-            () => {return selObj ? selObj.content : ""},
-            (v) => {if (selObj) {selObj.content = v}}
-        }></textarea>-->
+        <textarea class="task-desc" placeholder="Opis" bind:value={
+            () => {return selected ? selected.content : ""},
+            (v) => {if (selected) {selected.content = v}}
+        }></textarea>
     </div>
 </div>
 
